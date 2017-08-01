@@ -1,4 +1,4 @@
-# sample-spring-boot-echo
+# sample-spring-boot-echo  (Jimmy)
 
 sample-spring-boot-echo is a tiny sample bot application based on Spring Boot.
 
@@ -34,7 +34,7 @@ Get the Channel access token and Channel secret from the Channel Console.
 
 Tap the deploy button.
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/line/line-bot-sdk-java)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/skycrossx/line)
 
 ### Step 3
 
