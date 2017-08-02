@@ -37,6 +37,7 @@ import com.google.common.io.ByteStreams;
 import com.linecorp.bot.client.LineMessagingClient;
 import com.linecorp.bot.client.MessageContentResponse;
 import com.linecorp.bot.model.ReplyMessage;
+import com.linecorp.bot.model.PushMessage;
 import com.linecorp.bot.model.action.MessageAction;
 import com.linecorp.bot.model.action.PostbackAction;
 import com.linecorp.bot.model.action.URIAction;
@@ -241,14 +242,23 @@ public class KitchenSinkController {
         log.info("Got text message from {}: {}", replyToken, text);
         switch (text.toLowerCase()) {
             case "hello" : {
+                
+                TextMessage textMessage = new TextMessage("hello");
+                PushMessage pushMessage = new PushMessage(
+        "<to>",
+        textMessage
+);
+                
                        log.info("Response this message {}: {}", replyToken, text);
+                                   lineMessagingClient.pushMessage(pushMessage);
                 this.replyText(
                         replyToken,
-                        "Hello,How are you. My name is Eve.I am assistant of Mr. Songphot (Jimmy)."
+                        "Hello, How are you. My name is Eve.I am assistant of Mr. Songphot (Jimmy)."
                 );
                   this.replyText(
                         replyToken,
                         "Is there anything I can help you with? :)"
+                          
                 );
                 
                 
