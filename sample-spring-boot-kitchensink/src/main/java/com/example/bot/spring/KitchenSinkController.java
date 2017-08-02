@@ -273,7 +273,7 @@ public class KitchenSinkController {
             case "jibby": {
                 Random rand = new Random();
 
-                int n = rand.nextInt(3) + 1; 
+                int n = rand.nextInt(2) + 0; 
                      
         
         String names[] = {"ไออ้วน","ไอหมู","ขี้โม้"};
