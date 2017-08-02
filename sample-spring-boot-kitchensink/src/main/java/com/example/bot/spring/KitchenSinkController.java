@@ -256,11 +256,8 @@ public class KitchenSinkController {
 //                                }
 //                            };
                                         
-                TextMessage textMessage = new TextMessage("hello "+ profile.getDisplayName());
-                PushMessage pushMessage = new PushMessage(
-        userId,
-        textMessage
-);
+                TextMessage textMessage = new TextMessage("Hello "+ profile.getDisplayName());
+                PushMessage pushMessage = new PushMessage(userId,textMessage);
                   
                 
                        log.info("Response this message {}: {}", replyToken, text);
@@ -268,13 +265,9 @@ public class KitchenSinkController {
                                    
                 this.replyText(
                         replyToken,
-                        "Hello, How are you. My name is Eve.I am assistant of Mr. Songphot (Jimmy)."
+                        "My name is Eve.I am assistant of Mr. Songphot (Jimmy)." + '\n' + "Is there anything I can help you with? :)"
                 );
-                  this.replyText(
-                        replyToken,
-                        "Is there anything I can help you with? :)"
-                          
-                );
+
                 
                 
                 break;
