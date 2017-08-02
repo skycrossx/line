@@ -13,7 +13,6 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-
 package com.example.bot.spring;
 
 import java.io.IOException;
@@ -78,6 +77,7 @@ import com.linecorp.bot.model.profile.UserProfileResponse;
 import com.linecorp.bot.model.response.BotApiResponse;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
+import java.util.Random;
 
 import lombok.NonNull;
 import lombok.Value;
@@ -86,6 +86,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @LineMessageHandler
 public class KitchenSinkController {
+
     @Autowired
     private LineMessagingClient lineMessagingClient;
 
@@ -126,7 +127,7 @@ public class KitchenSinkController {
                             jpg.path.toString(),
                             previewImg.path.toString());
                     reply(((MessageEvent) event).getReplyToken(),
-                          new ImageMessage(jpg.getUri(), jpg.getUri()));
+                            new ImageMessage(jpg.getUri(), jpg.getUri()));
                 });
     }
 
@@ -151,10 +152,10 @@ public class KitchenSinkController {
                     DownloadedContent mp4 = saveContent("mp4", responseBody);
                     DownloadedContent previewImg = createTempFile("jpg");
                     system("convert",
-                           mp4.path + "[0]",
-                           previewImg.path.toString());
+                            mp4.path + "[0]",
+                            previewImg.path.toString());
                     reply(((MessageEvent) event).getReplyToken(),
-                          new VideoMessage(mp4.getUri(), previewImg.uri));
+                            new VideoMessage(mp4.getUri(), previewImg.uri));
                 });
     }
 
@@ -218,11 +219,11 @@ public class KitchenSinkController {
     }
 
     private void handleHeavyContent(String replyToken, String messageId,
-                                    Consumer<MessageContentResponse> messageConsumer) {
+            Consumer<MessageContentResponse> messageConsumer) {
         final MessageContentResponse response;
         try {
             response = lineMessagingClient.getMessageContent(messageId)
-                                          .get();
+                    .get();
         } catch (InterruptedException | ExecutionException e) {
             reply(replyToken, new TextMessage("Cannot get image: " + e.getMessage()));
             throw new RuntimeException(e);
@@ -242,130 +243,151 @@ public class KitchenSinkController {
 
         log.info("Got text message from {}: {}", replyToken, text);
         switch (text.toLowerCase()) {
-            case "hello" : {
-                  String userId = event.getSource().getUserId();
-                  
-            UserProfileResponse profile = lineMessagingClient
-                    .getProfile(userId)
-                    .get();
-            
+            case "hello": {
+                String userId = event.getSource().getUserId();
+
+                UserProfileResponse profile = lineMessagingClient
+                        .getProfile(userId)
+                        .get();
+
 //                            .whenComplete((profile, throwable) -> {
 //                                if (throwable != null) {
 //                                    this.replyText(replyToken, throwable.getMessage());
 //                                    return;
 //                                }
 //                            };
-                                        
-                TextMessage textMessage = new TextMessage("Hello "+ profile.getDisplayName());
-                PushMessage pushMessage = new PushMessage(userId,textMessage);
-                  
-                
-                       log.info("Response this message {}: {}", replyToken, text);
-                       lineMessagingClient.pushMessage(pushMessage);
-                                   
+                TextMessage textMessage = new TextMessage("Hello " + profile.getDisplayName());
+                PushMessage pushMessage = new PushMessage(userId, textMessage);
+
+                log.info("Response this message {}: {}", replyToken, text);
+                lineMessagingClient.pushMessage(pushMessage);
+
                 this.replyText(
                         replyToken,
                         "My name is Eve.I am assistant of Mr. Songphot (Jimmy)." + '\n' + "Is there anything I can help you with? :)"
                 );
 
-                
-                
                 break;
             }
-            case "profile": {
+            case "jibby": {
+                Random rand = new Random();
+
+                int n = rand.nextInt(3) + 1;
+                     
+        
+        String names[] = {"ไออ้วน","ไอหมู","ขี้โม้"};
+
+        this.replyText(
+                replyToken,
+                names[n].toString()
+        );
+        break;
+    }
+
+    
+        case "profile": {
                 String userId = event.getSource().getUserId();
-                if (userId != null) {
-                    lineMessagingClient
-                            .getProfile(userId)
-                            .whenComplete((profile, throwable) -> {
-                                if (throwable != null) {
-                                    this.replyText(replyToken, throwable.getMessage());
-                                    return;
-                                }
+        if (userId != null) {
+            lineMessagingClient
+                    .getProfile(userId)
+                    .whenComplete((profile, throwable) -> {
+                        if (throwable != null) {
+                            this.replyText(replyToken, throwable.getMessage());
+                            return;
+                        }
 
-                                this.reply(
-                                        replyToken,
-                                        Arrays.asList(new TextMessage(
-                                                              "Display name: " + profile.getDisplayName()),
-                                                      new TextMessage("Status message: "
-                                                                      + profile.getStatusMessage()))
-                                );
+                        this.reply(
+                                replyToken,
+                                Arrays.asList(new TextMessage(
+                                        "Display name: " + profile.getDisplayName()),
+                                        new TextMessage("Status message: "
+                                                + profile.getStatusMessage()))
+                        );
 
-                            });
-                } else {
-                    this.replyText(replyToken, "Bot can't use profile API without user ID");
-                }
-                break;
-            }
-            case "bye": {
+                    });
+        } else {
+            this.replyText(replyToken, "Bot can't use profile API without user ID");
+        }
+        break;
+    }
+
+    
+        case "bye": {
                 Source source = event.getSource();
-                if (source instanceof GroupSource) {
-                    this.replyText(replyToken, "Leaving group");
-                    lineMessagingClient.leaveGroup(((GroupSource) source).getGroupId()).get();
-                } else if (source instanceof RoomSource) {
-                    this.replyText(replyToken, "Leaving room");
-                    lineMessagingClient.leaveRoom(((RoomSource) source).getRoomId()).get();
-                } else {
-                    this.replyText(replyToken, "Bot can't leave from 1:1 chat");
-                }
-                break;
-            }
-            case "confirm": {
+        if (source instanceof GroupSource) {
+            this.replyText(replyToken, "Leaving group");
+            lineMessagingClient.leaveGroup(((GroupSource) source).getGroupId()).get();
+        } else if (source instanceof RoomSource) {
+            this.replyText(replyToken, "Leaving room");
+            lineMessagingClient.leaveRoom(((RoomSource) source).getRoomId()).get();
+        } else {
+            this.replyText(replyToken, "Bot can't leave from 1:1 chat");
+        }
+        break;
+    }
+
+    
+        case "confirm": {
                 ConfirmTemplate confirmTemplate = new ConfirmTemplate(
-                        "Do it?",
-                        new MessageAction("Yes", "Yes!"),
-                        new MessageAction("No", "No!")
-                       
-                );
-                TemplateMessage templateMessage = new TemplateMessage("Confirm alt text", confirmTemplate);
-                this.reply(replyToken, templateMessage);
-                break;
-            }
-            case "buttons": {
+                "Do it?",
+                new MessageAction("Yes", "Yes!"),
+                new MessageAction("No", "No!")
+        );
+        TemplateMessage templateMessage = new TemplateMessage("Confirm alt text", confirmTemplate);
+        this.reply(replyToken, templateMessage);
+        break;
+    }
+
+    
+        case "buttons": {
                 String imageUrl = createUri("/static/buttons/1040.jpg");
-                ButtonsTemplate buttonsTemplate = new ButtonsTemplate(
-                        imageUrl,
-                        "My button sample",
-                        "Hello, my button",
-                        Arrays.asList(
+        ButtonsTemplate buttonsTemplate = new ButtonsTemplate(
+                imageUrl,
+                "My button sample",
+                "Hello, my button",
+                Arrays.asList(
+                        new URIAction("Go to line.me",
+                                "https://line.me"),
+                        new PostbackAction("Say hello1",
+                                "hello こんにちは"),
+                        new PostbackAction("言 hello2",
+                                "hello こんにちは",
+                                "hello こんにちは"),
+                        new MessageAction("Say message",
+                                "Rice=米")
+                ));
+        TemplateMessage templateMessage = new TemplateMessage("Button alt text", buttonsTemplate);
+        this.reply(replyToken, templateMessage);
+        break;
+    }
+
+    
+        case "carousel": {
+                String imageUrl = createUri("/static/buttons/1040.jpg");
+        CarouselTemplate carouselTemplate = new CarouselTemplate(
+                Arrays.asList(
+                        new CarouselColumn(imageUrl, "hoge", "fuga", Arrays.asList(
                                 new URIAction("Go to line.me",
-                                              "https://line.me"),
+                                        "https://line.me"),
                                 new PostbackAction("Say hello1",
-                                                   "hello こんにちは"),
+                                        "hello こんにちは")
+                        )),
+                        new CarouselColumn(imageUrl, "hoge", "fuga", Arrays.asList(
                                 new PostbackAction("言 hello2",
-                                                   "hello こんにちは",
-                                                   "hello こんにちは"),
+                                        "hello こんにちは",
+                                        "hello こんにちは"),
                                 new MessageAction("Say message",
-                                                  "Rice=米")
-                        ));
-                TemplateMessage templateMessage = new TemplateMessage("Button alt text", buttonsTemplate);
-                this.reply(replyToken, templateMessage);
-                break;
-            }
-            case "carousel": {
-                String imageUrl = createUri("/static/buttons/1040.jpg");
-                CarouselTemplate carouselTemplate = new CarouselTemplate(
-                        Arrays.asList(
-                                new CarouselColumn(imageUrl, "hoge", "fuga", Arrays.asList(
-                                        new URIAction("Go to line.me",
-                                                      "https://line.me"),
-                                        new PostbackAction("Say hello1",
-                                                           "hello こんにちは")
-                                )),
-                                new CarouselColumn(imageUrl, "hoge", "fuga", Arrays.asList(
-                                        new PostbackAction("言 hello2",
-                                                           "hello こんにちは",
-                                                           "hello こんにちは"),
-                                        new MessageAction("Say message",
-                                                          "Rice=米")
-                                ))
-                        ));
-                TemplateMessage templateMessage = new TemplateMessage("Carousel alt text", carouselTemplate);
-                this.reply(replyToken, templateMessage);
-                break;
-            }
-            case "imagemap":
-                this.reply(replyToken, new ImagemapMessage(
+                                        "Rice=米")
+                        ))
+                ));
+        TemplateMessage templateMessage = new TemplateMessage("Carousel alt text", carouselTemplate);
+        this.reply(replyToken, templateMessage);
+        break;
+    }
+
+    case "imagemap":
+                this.reply(replyToken, 
+    new ImagemapMessage(
                         createUri("/static/rich"),
                         "This is alt text",
                         new ImagemapBaseSize(1040, 1040),
@@ -396,21 +418,27 @@ public class KitchenSinkController {
                                 )
                         )
                 ));
-                break;
-            default:
-                log.info("Returns echo message {}: {}", replyToken, text);
-                this.replyText(
-                        replyToken,
-                        text
+    break;
+            default
+
+    :
+    log.info (
+    "Returns echo message {}: {}", replyToken, text);
+                 
+
+    this.replyText(
+            replyToken,
+            text
                 );
-                break;
+
+break;
         }
     }
 
     private static String createUri(String path) {
         return ServletUriComponentsBuilder.fromCurrentContextPath()
-                                          .path(path).build()
-                                          .toUriString();
+                .path(path).build()
+                .toUriString();
     }
 
     private void system(String... args) {
@@ -447,11 +475,14 @@ public class KitchenSinkController {
         return new DownloadedContent(
                 tempFile,
                 createUri("/downloaded/" + tempFile.getFileName()));
-    }
+    
+
+}
 
     @Value
-    public static class DownloadedContent {
-        Path path;
-        String uri;
-    }
+public static class DownloadedContent {
+
+    Path path;
+    String uri;
+}
 }
