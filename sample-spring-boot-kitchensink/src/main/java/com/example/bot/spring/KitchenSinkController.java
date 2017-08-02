@@ -239,7 +239,16 @@ public class KitchenSinkController {
         String text = content.getText();
 
         log.info("Got text message from {}: {}", replyToken, text);
-        switch (text) {
+        switch (text.toLowerCase()) {
+            case "hello" : {
+                       log.info("Returns echo message {}: {}", replyToken, text);
+                this.replyText(
+                        replyToken,
+                        "Hello,How are you.My name is Eve.I am assistant of Mr. Songphot (Jimmy).Is there anything I can help you with?"
+                );
+                
+                break;
+            }
             case "profile": {
                 String userId = event.getSource().getUserId();
                 if (userId != null) {
@@ -283,6 +292,7 @@ public class KitchenSinkController {
                         "Do it?",
                         new MessageAction("Yes", "Yes!"),
                         new MessageAction("No", "No!")
+                       
                 );
                 TemplateMessage templateMessage = new TemplateMessage("Confirm alt text", confirmTemplate);
                 this.reply(replyToken, templateMessage);
