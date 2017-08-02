@@ -78,6 +78,7 @@ import com.linecorp.bot.model.response.BotApiResponse;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import lombok.NonNull;
 import lombok.Value;
@@ -272,14 +273,14 @@ public class KitchenSinkController {
             case "jibby": {
                 Random rand = new Random();
 
-                int n = rand.nextInt(3) + 1;
+                int n = ThreadLocalRandom.current().nextInt(1, 3 + 1);
                      
         
         String names[] = {"ไออ้วน","ไอหมู","ขี้โม้"};
 
         this.replyText(
                 replyToken,
-                names[1].toString()
+                names[n]
         );
         break;
     }
