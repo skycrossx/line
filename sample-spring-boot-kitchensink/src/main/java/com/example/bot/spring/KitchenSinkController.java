@@ -242,15 +242,23 @@ public class KitchenSinkController {
         log.info("Got text message from {}: {}", replyToken, text);
         switch (text.toLowerCase()) {
             case "hello" : {
-                
-                TextMessage textMessage = new TextMessage("hello");
+                  String userId = event.getSource().getUserId();
+                  lineMessagingClient
+                            .getProfile(userId)
+                                          .whenComplete((profile, throwable) -> {
+                                if (throwable != null) {
+                                    this.replyText(replyToken, throwable.getMessage());
+                                    return;
+                                }
+                TextMessage textMessage = new TextMessage("hello "+ profile.getDisplayName());
                 PushMessage pushMessage = new PushMessage(
-        "<to>",
+        userId,
         textMessage
 );
                 
                        log.info("Response this message {}: {}", replyToken, text);
-                                   lineMessagingClient.pushMessage(pushMessage);
+                       lineMessagingClient.pushMessage(pushMessage);
+                                   
                 this.replyText(
                         replyToken,
                         "Hello, How are you. My name is Eve.I am assistant of Mr. Songphot (Jimmy)."
