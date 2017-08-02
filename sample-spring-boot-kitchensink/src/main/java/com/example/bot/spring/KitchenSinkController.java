@@ -74,6 +74,7 @@ import com.linecorp.bot.model.message.template.ButtonsTemplate;
 import com.linecorp.bot.model.message.template.CarouselColumn;
 import com.linecorp.bot.model.message.template.CarouselTemplate;
 import com.linecorp.bot.model.message.template.ConfirmTemplate;
+import com.linecorp.bot.model.profile.UserProfileResponse;
 import com.linecorp.bot.model.response.BotApiResponse;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
@@ -243,18 +244,24 @@ public class KitchenSinkController {
         switch (text.toLowerCase()) {
             case "hello" : {
                   String userId = event.getSource().getUserId();
-                  lineMessagingClient
-                            .getProfile(userId)
-                                          .whenComplete((profile, throwable) -> {
-                                if (throwable != null) {
-                                    this.replyText(replyToken, throwable.getMessage());
-                                    return;
-                                }
+                  
+            UserProfileResponse profile = lineMessagingClient
+                    .getProfile(userId)
+                    .get();
+            
+//                            .whenComplete((profile, throwable) -> {
+//                                if (throwable != null) {
+//                                    this.replyText(replyToken, throwable.getMessage());
+//                                    return;
+//                                }
+//                            };
+                                        
                 TextMessage textMessage = new TextMessage("hello "+ profile.getDisplayName());
                 PushMessage pushMessage = new PushMessage(
         userId,
         textMessage
 );
+                  
                 
                        log.info("Response this message {}: {}", replyToken, text);
                        lineMessagingClient.pushMessage(pushMessage);
