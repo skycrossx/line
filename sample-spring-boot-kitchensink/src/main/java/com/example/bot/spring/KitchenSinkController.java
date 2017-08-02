@@ -241,11 +241,16 @@ public class KitchenSinkController {
         log.info("Got text message from {}: {}", replyToken, text);
         switch (text.toLowerCase()) {
             case "hello" : {
-                       log.info("Returns echo message {}: {}", replyToken, text);
+                       log.info("Response this message {}: {}", replyToken, text);
                 this.replyText(
                         replyToken,
-                        "Hello,How are you.My name is Eve.I am assistant of Mr. Songphot (Jimmy).Is there anything I can help you with?"
+                        "Hello,How are you. My name is Eve.I am assistant of Mr. Songphot (Jimmy)."
                 );
+                  this.replyText(
+                        replyToken,
+                        "Is there anything I can help you with? :)"
+                );
+                
                 
                 break;
             }
