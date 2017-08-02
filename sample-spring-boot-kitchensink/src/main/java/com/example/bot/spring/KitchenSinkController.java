@@ -279,7 +279,7 @@ public class KitchenSinkController {
 
         this.replyText(
                 replyToken,
-                names[n].toString()
+                names[1].toString()
         );
         break;
     }
