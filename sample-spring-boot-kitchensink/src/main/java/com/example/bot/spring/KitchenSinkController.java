@@ -273,9 +273,9 @@ public class KitchenSinkController {
             case "jibby": {
                 Random rand = new Random();
 
-                int n = rand.nextInt(2) + 0; 
-                     
-        
+                int n = rand.nextInt(2) + 0;
+
+
         String names[] = {"ไออ้วน","ไอหมู","ขี้โม้"};
 
         this.replyText(
@@ -285,7 +285,7 @@ public class KitchenSinkController {
         break;
     }
 
-    
+
         case "profile": {
                 String userId = event.getSource().getUserId();
         if (userId != null) {
@@ -302,7 +302,10 @@ public class KitchenSinkController {
                                 Arrays.asList(new TextMessage(
                                         "Display name: " + profile.getDisplayName()),
                                         new TextMessage("Status message: "
-                                                + profile.getStatusMessage()))
+                                                + profile.getStatusMessage()),
+                                                new TextMessage("Status: "
+                                                        + profile.getLatitude())        
+                                                )
                         );
 
                     });
@@ -312,7 +315,7 @@ public class KitchenSinkController {
         break;
     }
 
-    
+
         case "bye": {
                 Source source = event.getSource();
         if (source instanceof GroupSource) {
@@ -327,7 +330,7 @@ public class KitchenSinkController {
         break;
     }
 
-    
+
         case "confirm": {
                 ConfirmTemplate confirmTemplate = new ConfirmTemplate(
                 "Do it?",
@@ -339,7 +342,7 @@ public class KitchenSinkController {
         break;
     }
 
-    
+
         case "buttons": {
                 String imageUrl = createUri("/static/buttons/1040.jpg");
         ButtonsTemplate buttonsTemplate = new ButtonsTemplate(
@@ -362,7 +365,7 @@ public class KitchenSinkController {
         break;
     }
 
-    
+
         case "carousel": {
                 String imageUrl = createUri("/static/buttons/1040.jpg");
         CarouselTemplate carouselTemplate = new CarouselTemplate(
@@ -387,7 +390,7 @@ public class KitchenSinkController {
     }
 
     case "imagemap":
-                this.reply(replyToken, 
+                this.reply(replyToken,
     new ImagemapMessage(
                         createUri("/static/rich"),
                         "This is alt text",
@@ -425,7 +428,7 @@ public class KitchenSinkController {
     :
     log.info (
     "Returns echo message {}: {}", replyToken, text);
-                 
+
 
     this.replyText(
             replyToken,
@@ -476,7 +479,7 @@ break;
         return new DownloadedContent(
                 tempFile,
                 createUri("/downloaded/" + tempFile.getFileName()));
-    
+
 
 }
 
