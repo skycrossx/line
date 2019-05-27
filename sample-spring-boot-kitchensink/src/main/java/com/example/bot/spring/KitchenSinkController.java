@@ -244,6 +244,26 @@ public class KitchenSinkController {
 
         log.info("Got text message from {}: {}", replyToken, text);
         switch (text.toLowerCase()) {
+          case "test": {
+              String userId = event.getSource().getUserId();
+
+              UserProfileResponse profile = lineMessagingClient
+                      .getProfile(userId)
+                      .get();
+
+              TextMessage textMessage = new TextMessage("Hello " + profile.getDisplayName());
+              PushMessage pushMessage = new PushMessage(userId, textMessage);
+
+              log.info("Response this message {}: {}", replyToken, text);
+              lineMessagingClient.pushMessage(pushMessage);
+
+              this.replyText(
+                      replyToken,
+                      "test"
+              );
+
+              break;
+          }
             case "hello": {
                 String userId = event.getSource().getUserId();
 
@@ -304,7 +324,7 @@ public class KitchenSinkController {
                                         new TextMessage("Status message: "
                                                 + profile.getStatusMessage()),
                                                 new TextMessage("Status: "
-                                                        + profile.getStatusMessage())        
+                                                        + profile.getStatusMessage())
                                                 )
                         );
 
