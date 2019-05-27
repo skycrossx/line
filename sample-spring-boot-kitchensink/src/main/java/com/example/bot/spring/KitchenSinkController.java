@@ -304,7 +304,7 @@ public class KitchenSinkController {
                                         new TextMessage("Status message: "
                                                 + profile.getStatusMessage()),
                                                 new TextMessage("Status: "
-                                                        + profile.getLatitude()))        
+                                                        + profile.getStatusMessage())        
                                                 )
                         );
 
