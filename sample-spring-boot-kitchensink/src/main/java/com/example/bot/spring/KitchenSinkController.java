@@ -285,7 +285,8 @@ public class KitchenSinkController {
 
                 this.replyText(
                         replyToken,
-                        "My name is Eve.I am assistant of Mr. Songphot (Jimmy)." + '\n' + "Is there anything I can help you with? :)" + '\n' + "1....." + '\n' + "2....." + '\n' + "3....."
+                        "My name is Eve.I am assistant of Mr. Songphot (Jimmy)." + '\n' + "Is there anything I can help you with? :)"
+
                 );
 
                 break;
