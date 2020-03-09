@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright 2016 LINE Corporation
  *
  * LINE Corporation licenses this file to you under the Apache License,
@@ -285,7 +285,7 @@ public class KitchenSinkController {
 
                 this.replyText(
                         replyToken,
-                        "My name is Eve.I am assistant of Mr. Songphot (Jimmy)." + '\n' + "Is there anything I can help you with? :)"
+                        "My name is Eve.I am assistant of Mr. Songphot (Jimmy)." + '\n' + "Is there anything I can help you with? :)" + '\n' + "1....." + '\n' + "2....." + '\n' + "3....."
                 );
 
                 break;
